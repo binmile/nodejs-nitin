@@ -1,0 +1,17 @@
+{
+  "name": "nodejs",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "This Project is create to learn nodejs",
+  "main": "index.js",
+  "repository": {
+    "type": "Git",
+    "url": "https://github.com/binmile/nodejs-nitin"
+  },
+  "scripts": {
+    "dev": "nodemon index.js"
+  },
+  "keywords": [],
+  "author": "Nitin Kukreti",
+  "license": "ISC"
+}

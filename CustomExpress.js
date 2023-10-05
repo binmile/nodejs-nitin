@@ -1,8 +1,9 @@
-const http= require('http');
+import http from 'http';
 
-module.exports = class CustomExpress {
-    constructor(){
-      this.server = http.createServer();
+export default class CustomExpress {
+    constructor(port=8000){
+        this.server = http.createServer();
+        this.server.listen(port)
     }
     
     get(path,callback){
@@ -49,8 +50,5 @@ module.exports = class CustomExpress {
                 res.end();
             }
         })
-    }
-    listen(port,callback){
-        this.server.listen(port,callback)
     }
 }
