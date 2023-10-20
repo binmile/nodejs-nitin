@@ -5,13 +5,20 @@
     "description": "This Project is create to learn nodejs",
     "main": "index.js",
     "repository": {
-      "type": "Git",
-      "url": "https://github.com/binmile/nodejs-nitin"
+        "type": "Git",
+        "url": "https://github.com/binmile/nodejs-nitin"
     },
     "scripts": {
-      "dev": "nodemon index.js"
+        "dev": "nodemon index.js"
     },
     "keywords": [],
     "author": "Nitin Kukreti",
-    "license": "ISC"
-  }
+    "license": "ISC",
+    "dependencies": {
+        "await-to-js": "^3.0.0",
+        "express": "^4.18.2",
+        "mysql": "^2.18.1",
+        "mysql2": "^3.6.2",
+        "sequelize": "^6.33.0"
+    }
+}
