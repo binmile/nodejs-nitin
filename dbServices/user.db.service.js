@@ -9,15 +9,16 @@ async function createUserDbService(data) {
   return createdUser;
 }
 
-async function getAllUsersDbService(query) {
-  const limit = parseInt(query?.limit ?? "10");
-  const pageNo = parseInt(query?.page ?? "1") - 1;
-  return {
-    totalCount : await user.count(),
+async function getAllUsersDbService(query,placeholder,sort) {
+  
+  return { 
+    totalCount : await user.count({where:placeholder}),
     user: await user.findAll({
-      limit: limit,
-      offset: pageNo * limit,
-      attributes: ["userId", "firstName", "lastName"],
+      limit: query.limit,
+      offset: query.offset,
+      attributes: ["userId", "firstName", "lastName","email","gender","phoneNumber"], 
+      where:placeholder,
+      order : [sort]
     }),
   };
 }

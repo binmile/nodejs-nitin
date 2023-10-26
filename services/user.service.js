@@ -12,35 +12,31 @@ async function getUserByIdService(id) {
 }
 
 async function createUserService(data) {
-  const userSchema = Joi.object().keys({
-    firstName: Joi.string().alphanum().min(3).max(20).required(),
-    lastName: Joi.string().alphanum().min(3).max(20).required(),
-    password: Joi.string().alphanum().min(8).required(),
-  });
-  const { error } = userSchema.validate(data);
-  if (error) {
-    throw error;
-  }
   return await createUserDbService(data);
 }
 
 async function getAllUsersService(query) {
-  return getAllUsersDbService(query);
+    const limit = parseInt(query?.limit ?? "10");
+    const pageNo = parseInt(query?.page ?? "1") - 1;
+    const placeholder = {};
+    let sort = ["userId","ASC"];
+    if(query.sortField && query.order) sort = [query.sortField,query.order]; 
+
+    if(query.age) placeholder.age = query.age;
+    if(query.firstName) placeholder.firstName = query.firstName;
+    if(query.lastName) placeholder.lastName = query.lastName;
+    if(query.email) placeholder.email = query.email;
+    if(query.gender) placeholder.gender = query.gender;
+   query.limit = limit;
+   query.offset = pageNo * limit;
+
+  return getAllUsersDbService(query,placeholder,sort);
 }
 
 async function deleteUserByIdService(id) {
   await deleteUserByIdDbService(id);
 }
 async function updateUserByIdService(id, placeholder) {
-  const userSchema = Joi.object().keys({
-    firstName: Joi.string().alphanum().min(3).max(20),
-    lastName: Joi.string().alphanum().min(3).max(20),
-    password: Joi.string().alphanum().min(8),
-  });
-  const { error } = userSchema.validate(placeholder);
-
-  if (error) throw error;
-
   await updateUserByIdDbService(id, placeholder);
 }
 

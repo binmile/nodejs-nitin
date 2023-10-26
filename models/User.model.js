@@ -17,9 +17,29 @@ const user=db.define("User",{
     password : {
         type : DataTypes.STRING,
         allowNull:false
-    }
+    },
+    email : {
+        type : DataTypes.STRING,
+        allowNull:false,
+        unique:true
+    },
+    age : {
+        type : DataTypes.INTEGER,
+        allowNull:false
+    },
+    phoneNumber:{
+        type:DataTypes.STRING,
+        allowNull:false,
+        unique:true 
+    },
+    gender:{
+        type:DataTypes.STRING,
+        allowNull:false,
+        values:["male","female"]
+    }  
 
 });
+
 
 
 
