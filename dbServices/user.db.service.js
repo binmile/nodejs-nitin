@@ -1,24 +1,79 @@
+import {Op} from "sequelize";
 import { user } from "../models/User.model.js";
-
 async function getUserByIdDbService(id) {
   return await user.findByPk(id);
 }
 
 async function createUserDbService(data) {
-  const createdUser = await user.create(data);
-  return createdUser;
+  return user.create(data);
 }
 
-async function getAllUsersDbService(query,placeholder,sort) {
-  
-  return { 
-    totalCount : await user.count({where:placeholder}),
+async function getAllUsersDbService(query, placeholder, sort, q) {
+  return {
+    totalCount: await user.count({
+      where: {
+        ...placeholder,
+        [Op.or]: [
+          {
+            firstName: {
+              [Op.like]: `%${q}%`,
+            },
+          },
+          {
+            lastName: {
+              [Op.like]: `%${q}%`,
+            },
+          },
+          {
+            email: {
+              [Op.like]: `%${q}%`,
+            },
+          },
+          {
+            phoneNumber: {
+              [Op.like]: `%${q}%`,
+            },
+          },
+        ],
+      },
+    }),
     user: await user.findAll({
       limit: query.limit,
       offset: query.offset,
-      attributes: ["userId", "firstName", "lastName","email","gender","phoneNumber"], 
-      where:placeholder,
-      order : [sort]
+      attributes: [
+        "userId",
+        "firstName",
+        "lastName",
+        "email",
+        "gender",
+        "phoneNumber",
+      ],
+      where: {
+        ...placeholder,
+        [Op.or]: [
+          {
+            firstName: {
+              [Op.like]: `%${q}%`,
+            },
+          },
+          {
+            lastName: {
+              [Op.like]: `%${q}%`,
+            },
+          },
+          {
+            email: {
+              [Op.like]: `%${q}%`,
+            },
+          },
+          {
+            phoneNumber: {
+              [Op.like]: `%${q}%`,
+            },
+          },
+        ],
+      },
+      order: [sort],
     }),
   };
 }

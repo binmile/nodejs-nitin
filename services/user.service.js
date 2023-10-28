@@ -1,4 +1,3 @@
-import Joi from "joi";
 import {
   createUserDbService,
   deleteUserByIdDbService,
@@ -12,10 +11,12 @@ async function getUserByIdService(id) {
 }
 
 async function createUserService(data) {
-  return await createUserDbService(data);
+  return  createUserDbService(data);
 }
 
 async function getAllUsersService(query) {
+    const q= query?.q ?? "";
+    console.log(q,"query");
     const limit = parseInt(query?.limit ?? "10");
     const pageNo = parseInt(query?.page ?? "1") - 1;
     const placeholder = {};
@@ -30,7 +31,7 @@ async function getAllUsersService(query) {
    query.limit = limit;
    query.offset = pageNo * limit;
 
-  return getAllUsersDbService(query,placeholder,sort);
+  return getAllUsersDbService(query,placeholder,sort,q);
 }
 
 async function deleteUserByIdService(id) {
