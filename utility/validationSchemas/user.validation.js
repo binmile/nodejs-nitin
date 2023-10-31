@@ -25,3 +25,8 @@ export const updateUserValidator = Joi.object().keys({
     .regex(/^[0-9]{10}$/)
     .messages({ "string.pattern.base": `Phone number must have 10 digits.` }),
 });
+
+export const signInUserValidator = Joi.object().keys({
+   email:Joi.string().email().required(),
+   password:Joi.string().required()
+})

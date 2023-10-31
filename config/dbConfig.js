@@ -5,3 +5,7 @@ export const dbConfig = {
     userName: 'root',
     dialect : 'mysql'
 }
+
+export const securityConfig = {
+   jwtSecret : "fdsfsnfnfwnfdsnfewnnfksnf=fdf/fds%fds"
+}

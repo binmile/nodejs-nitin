@@ -16,4 +16,5 @@ export const RESPONSE_CODES = {
     UPDATE_SUCCESS: "Data updated successfully",
     DELETE_SUCCESS: "Data deleted successfully",
     VALIDATION_ERROR: "Invalid types",
+    Insufficient_data: "Data is not provided",
   };

@@ -5,11 +5,13 @@ import {
   deleteUserByIdService,
   createUserService,
   getAllUsersService,
+  signIn,
 } from "../services/user.service.js";
 import { RESPONSE_CODES } from "../utility/constants.js";
 import { responseHandler } from "../utility/responseHandler.js";
 import {
   createUserValidator,
+  signInUserValidator,
   updateUserValidator,
 } from "../utility/validationSchemas/user.validation.js";
 to;
@@ -44,7 +46,7 @@ async function createUserController(req, res) {
     });
   responseHandler({
     statusCode: RESPONSE_CODES.SUCCESS_CREATED,
-    data: data.toJSON(),
+    data: "user is created successfully",
     res,
   });
 }
@@ -77,10 +79,30 @@ function deleteUserController(req, res) {
   });
 }
 
+async function signInUserController(req,res){
+  const {error} = signInUserValidator.validate(req.body);
+  const [err,data] = await to(signIn(req.body));
+  if(error||err) {
+   return responseHandler({
+      statusCode: RESPONSE_CODES.FAILURE_SERVICE_UNAVAILABLE,
+      error: true,
+      message: err?.message || error?.message,
+      res,
+    });
+  }
+
+  responseHandler({
+    res,
+    data:data
+  })
+
+}
+
 export {
   deleteUserController,
   createUserController,
   updateUserController,
   getUserByIDController,
   getUsersController,
+  signInUserController
 };

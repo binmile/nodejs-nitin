@@ -1,4 +1,4 @@
-import {Op} from "sequelize";
+import { Op } from "sequelize";
 import { user } from "../models/User.model.js";
 async function getUserByIdDbService(id) {
   return await user.findByPk(id);
@@ -91,10 +91,21 @@ async function updateUserByIdDbService(id, placeholder) {
   });
 }
 
+async function getUserByEmailDbService(email) {
+  const loggedUser = user.findOne({
+    where: {
+      email: email,
+    },
+    attributes: ["userId", "firstName", "lastName", "email","password"],
+  });
+  return loggedUser;
+}
+
 export {
   getUserByIdDbService,
   createUserDbService,
   updateUserByIdDbService,
   deleteUserByIdDbService,
   getAllUsersDbService,
+  getUserByEmailDbService,
 };
