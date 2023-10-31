@@ -4,7 +4,7 @@ import { responseHandler } from "../utility/responseHandler.js";
 import { securityConfig } from "../config/dbConfig.js";
 
 export const authUserMiddleware = (req, res, next) => {
-    console.log(req.headers.authorization)
+    console.log(req.headers.authorization);
     if (req.headers.authorization){
     try {
       const token = req.headers.authorization.split(" ")[1];

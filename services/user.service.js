@@ -26,9 +26,14 @@ async function signIn(data) {
   const result = await bcrypt.compare(password, userOfSignIn.password);
   console.log(result);
   if (result==true){
-    return { authToken: Jwt.sign(userOfSignIn.toJSON(), securityConfig.jwtSecret, {expiresIn: '20d'})};
+    return getJwtTokenService(userOfSignIn);
   }
   throw new Error({ message: "Invalid password" });
+}
+
+function getJwtTokenService(data) {
+  
+  return { authToken: Jwt.sign(data.toJSON(), securityConfig.jwtSecret, {expiresIn: '20d'})};
 }
 
 async function getAllUsersService(query) {
@@ -65,4 +70,5 @@ export {
   deleteUserByIdService,
   getAllUsersService,
   signIn,
+  getJwtTokenService
 };

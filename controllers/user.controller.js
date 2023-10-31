@@ -6,6 +6,7 @@ import {
   createUserService,
   getAllUsersService,
   signIn,
+  getJwtTokenService,
 } from "../services/user.service.js";
 import { RESPONSE_CODES } from "../utility/constants.js";
 import { responseHandler } from "../utility/responseHandler.js";
@@ -37,16 +38,18 @@ async function createUserController(req, res) {
   const user = req.body;
   const { error } = createUserValidator.validate(user);
   const [err, data] = await to(createUserService(user));
+  console.log(data);
   if (err || error)
-    responseHandler({
+   return responseHandler({
       statusCode: RESPONSE_CODES.FAILURE_SERVICE_UNAVAILABLE,
       error: true,
       message: err?.message || error?.message,
       res,
     });
+
   responseHandler({
     statusCode: RESPONSE_CODES.SUCCESS_CREATED,
-    data: "user is created successfully",
+    data: getJwtTokenService(data),
     res,
   });
 }
