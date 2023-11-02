@@ -1,10 +1,22 @@
 import "./App.js";
-// import { db } from "./database/dataSource.js";
-// import { user } from "./models/User.model.js";
+import "./database/dataSource.js";
+import {user} from "./models/User.model.js";
+import {Role} from  "./models/Role.model.js";
 
 
 
 import "./routes/user.routes.js";
+
+Role.belongsTo(user,{
+    foreignKey:'userId',
+})
+
+user.hasMany(Role,{
+
+     foreignKey:"userId"
+})
+
+
 
 
 

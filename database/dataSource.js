@@ -7,7 +7,6 @@ const db = new Sequelize(
   {
     host: dbConfig.host,
     dialect: dbConfig.dialect,
-    //* one of 'mysql' | 'postgres' | 'sqlite' | 'mariadb' | 'mssql' | 'db2' | 'snowflake' | 'oracle' */
   }
 );
 

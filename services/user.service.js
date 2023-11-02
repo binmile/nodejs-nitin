@@ -1,10 +1,14 @@
 import {
+  createRoleDbService,
   createUserDbService,
   deleteUserByIdDbService,
   getAllUsersDbService,
+  getFullProfileDbService,
   getUserByEmailDbService,
   getUserByIdDbService,
   updateUserByIdDbService,
+  getRoleByRoleIdAndUserIdDbService,
+  updateRoleByIdDbService
 } from "../dbServices/user.db.service.js";
 import bcrypt from "bcrypt";
 import Jwt from "jsonwebtoken";
@@ -63,12 +67,33 @@ async function updateUserByIdService(id, placeholder) {
   await updateUserByIdDbService(id, placeholder);
 }
 
+async function addRoleService(role){
+
+  return await createRoleDbService(role);
+
+}
+
+async function getFullProfileService(userId){
+    return await getFullProfileDbService(userId);
+}
+async function checkRoleChangePermissionService(roleId,userId){
+    const role = await getRoleByRoleIdAndUserIdDbService(roleId,userId);
+     
+    return role!=null;
+}
+async function updateRoleByRoleIdService(roleID,data){
+    return await updateRoleByIdDbService(roleID,data);
+} 
 export {
+  addRoleService,
   getUserByIdService,
   createUserService,
   updateUserByIdService,
   deleteUserByIdService,
   getAllUsersService,
   signIn,
-  getJwtTokenService
+  getJwtTokenService,
+  getFullProfileService,
+  checkRoleChangePermissionService,
+  updateRoleByRoleIdService
 };

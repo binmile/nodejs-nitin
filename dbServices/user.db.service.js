@@ -1,11 +1,16 @@
 import { Op } from "sequelize";
 import { user } from "../models/User.model.js";
+import { Role } from "../models/Role.model.js";
 async function getUserByIdDbService(id) {
   return await user.findByPk(id);
 }
 
 async function createUserDbService(data) {
   return user.create(data);
+}
+
+async function createRoleDbService(data){
+  return Role.create(data);
 }
 
 async function getAllUsersDbService(query, placeholder, sort, q) {
@@ -101,11 +106,37 @@ async function getUserByEmailDbService(email) {
   return loggedUser;
 }
 
+async function getFullProfileDbService(userId){
+  return user.findByPk(userId,{include:[{
+    model:Role,
+    attributes:["role_name","description","id"]
+  }]})
+}
+
+const getRoleByRoleIdAndUserIdDbService=async (id,userId)=>{
+  return await Role.findOne({where:{
+     userId,
+     id
+  }})
+}
+
+const updateRoleByIdDbService = async (id,data)=>{
+  return await Role.update(data,{
+    where:{
+      id:id
+    }
+  })
+}
+
 export {
+  getFullProfileDbService,
   getUserByIdDbService,
   createUserDbService,
   updateUserByIdDbService,
   deleteUserByIdDbService,
   getAllUsersDbService,
   getUserByEmailDbService,
+  createRoleDbService,
+  getRoleByRoleIdAndUserIdDbService,
+  updateRoleByIdDbService
 };

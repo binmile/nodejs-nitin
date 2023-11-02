@@ -17,4 +17,5 @@ export const RESPONSE_CODES = {
     DELETE_SUCCESS: "Data deleted successfully",
     VALIDATION_ERROR: "Invalid types",
     Insufficient_data: "Data is not provided",
+    FAILURE_FORBIDDEN_ACCESS:"you are not authorized to access"
   };

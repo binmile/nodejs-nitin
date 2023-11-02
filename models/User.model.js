@@ -1,5 +1,6 @@
 import { db } from "../database/dataSource.js";
 import {DataTypes} from 'sequelize';
+import { Role } from "./Role.model.js";
 const user=db.define("User",{
     userId:{
         type : DataTypes.INTEGER,
@@ -39,6 +40,8 @@ const user=db.define("User",{
     }  
 
 });
+
+
 
 
 
