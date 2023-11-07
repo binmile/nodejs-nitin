@@ -10,7 +10,9 @@ import {
   addRoleService,
   getFullProfileService,
   checkRoleChangePermissionService,
-  updateRoleByRoleIdService
+  updateRoleByRoleIdService,
+  userCreationNotificationService,
+  userAuthNotificationService,
 } from "../services/user.service.js";
 import { RESPONSE_CODES, RESPONSE_MESSAGES } from "../utility/constants.js";
 import { responseHandler } from "../utility/responseHandler.js";
@@ -23,6 +25,10 @@ import {
   RoleValidator,
   updateRoleValidator,
 } from "../utility/validationSchemas/role.validation.js";
+import {
+  getAllUserInnerJoinDbService,
+  getAllUserRightJoinDbService,
+} from "../dbServices/user.db.service.js";
 to;
 async function getUserByIDController(req, res) {
   const id = req.params.id;
@@ -55,7 +61,7 @@ async function createUserController(req, res) {
       message: err?.message || error?.message,
       res,
     });
-
+  userCreationNotificationService(data.email);
   responseHandler({
     statusCode: RESPONSE_CODES.SUCCESS_CREATED,
     data: getJwtTokenService(data),
@@ -102,7 +108,7 @@ async function signInUserController(req, res) {
       res,
     });
   }
-
+  userAuthNotificationService(req.body.email);
   responseHandler({
     res,
     data: data,
@@ -141,10 +147,21 @@ const updateRoleController = async (req, res) => {
   if (error)
     return responseHandler({ res, error: true, message: error.message });
 
-  const [err,data] =await to(updateRoleByRoleIdService(roleId,req.body));
+  const [err, data] = await to(updateRoleByRoleIdService(roleId, req.body));
 
   return responseHandler({ res });
 };
+async function getAllUserLeftJoinController(req, res) {
+  return responseHandler({ res, data: await getAllUserInnerJoinDbService() });
+}
+
+async function getAllUserRightJoinController(req, res) {
+  return responseHandler({ res, data: await getAllUserRightJoinDbService() });
+}
+
+async function getAllUserInnerJoinController(req, res) {
+  return responseHandler({ res, data: await getAllUserInnerJoinDbService() });
+}
 
 export {
   deleteUserController,
@@ -156,4 +173,7 @@ export {
   addRoleController,
   getFullProfileController,
   updateRoleController,
+  getAllUserLeftJoinController,
+  getAllUserRightJoinController,
+  getAllUserInnerJoinController,
 };

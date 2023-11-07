@@ -2,15 +2,17 @@ import jwt from "jsonwebtoken";
 import { RESPONSE_CODES, RESPONSE_MESSAGES } from "../utility/constants.js";
 import { responseHandler } from "../utility/responseHandler.js";
 import { securityConfig } from "../config/dbConfig.js";
+import requestIp from 'request-ip';
 
 export const authUserMiddleware = (req, res, next) => {
-    console.log(req.headers.authorization);
-    if (req.headers.authorization){
+  console.log(req.headers.authorization);
+  var ip = requestIp.getClientIp(req);
+  if (req.headers.authorization) {
     try {
       const token = req.headers.authorization.split(" ")[1];
       console.log(token);
       const decoded = jwt.verify(token, securityConfig.jwtSecret);
-      console.log("user authenticate successfully: ",decoded);
+      console.log("user authenticate successfully: ", decoded);
       req.user = decoded;
       return next();
     } catch (error) {
@@ -18,7 +20,7 @@ export const authUserMiddleware = (req, res, next) => {
         error: true,
         message: error.message,
         statusCode: RESPONSE_CODES.FAILURE_FORBIDDEN_ACCESS,
-        res
+        res,
       });
     }
   }
@@ -26,6 +28,6 @@ export const authUserMiddleware = (req, res, next) => {
     error: true,
     message: RESPONSE_MESSAGES.Insufficient_data,
     statusCode: RESPONSE_CODES.FAILURE_FORBIDDEN_ACCESS,
-    res
+    res,
   });
 };

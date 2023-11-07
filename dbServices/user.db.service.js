@@ -1,6 +1,8 @@
 import { Op } from "sequelize";
 import { user } from "../models/User.model.js";
 import { Role } from "../models/Role.model.js";
+import { db } from "../database/dataSource.js";
+
 async function getUserByIdDbService(id) {
   return await user.findByPk(id);
 }
@@ -128,6 +130,46 @@ const updateRoleByIdDbService = async (id,data)=>{
   })
 }
 
+async function getAllUserRightJoinDbService() {
+  const sql = `
+    SELECT Roles.*, Users.*
+    FROM Roles
+    RIGHT JOIN Users ON Roles.userId = Users.userId;
+  `;
+
+  return await db.query(sql, {
+    type: db.QueryTypes.SELECT,
+  });
+}
+
+
+async function getAllUserLeftJoinDbService() {
+  const sql = `
+  SELECT Roles.*, Users.*
+  FROM Roles
+  JOIN Users ON Roles.userId = Users.userId;
+  
+  `;
+
+  return await db.query(sql, {
+    type: db.QueryTypes.SELECT
+  });
+}
+
+async function getAllUserInnerJoinDbService() {
+  const sql = `
+  SELECT Roles.*, Users.*
+  FROM Roles
+  INNER JOIN Users ON Roles.userId = Users.userId;
+  
+  `;
+
+  return await db.query(sql, {
+    type: db.QueryTypes.SELECT
+  });
+}
+
+
 export {
   getFullProfileDbService,
   getUserByIdDbService,
@@ -138,5 +180,8 @@ export {
   getUserByEmailDbService,
   createRoleDbService,
   getRoleByRoleIdAndUserIdDbService,
-  updateRoleByIdDbService
+  updateRoleByIdDbService,
+  getAllUserLeftJoinDbService,
+  getAllUserRightJoinDbService,
+  getAllUserInnerJoinDbService
 };

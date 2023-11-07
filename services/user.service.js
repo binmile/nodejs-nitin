@@ -8,11 +8,12 @@ import {
   getUserByIdDbService,
   updateUserByIdDbService,
   getRoleByRoleIdAndUserIdDbService,
-  updateRoleByIdDbService
+  updateRoleByIdDbService,
 } from "../dbServices/user.db.service.js";
 import bcrypt from "bcrypt";
 import Jwt from "jsonwebtoken";
 import { securityConfig } from "../config/dbConfig.js";
+import { createTransportOptions, sendMailService } from "../email/setup.js";
 async function getUserByIdService(id) {
   return await getUserByIdDbService(id);
 }
@@ -29,15 +30,18 @@ async function signIn(data) {
   const userOfSignIn = await getUserByEmailDbService(email);
   const result = await bcrypt.compare(password, userOfSignIn.password);
   console.log(result);
-  if (result==true){
+  if (result == true) {
     return getJwtTokenService(userOfSignIn);
   }
   throw new Error({ message: "Invalid password" });
 }
 
 function getJwtTokenService(data) {
-  
-  return { authToken: Jwt.sign(data.toJSON(), securityConfig.jwtSecret, {expiresIn: '20d'})};
+  return {
+    authToken: Jwt.sign(data.toJSON(), securityConfig.jwtSecret, {
+      expiresIn: "20d",
+    }),
+  };
 }
 
 async function getAllUsersService(query) {
@@ -67,24 +71,43 @@ async function updateUserByIdService(id, placeholder) {
   await updateUserByIdDbService(id, placeholder);
 }
 
-async function addRoleService(role){
-
+async function addRoleService(role) {
   return await createRoleDbService(role);
-
 }
 
-async function getFullProfileService(userId){
-    return await getFullProfileDbService(userId);
+async function getFullProfileService(userId) {
+  return await getFullProfileDbService(userId);
 }
-async function checkRoleChangePermissionService(roleId,userId){
-    const role = await getRoleByRoleIdAndUserIdDbService(roleId,userId);
-     
-    return role!=null;
+async function checkRoleChangePermissionService(roleId, userId) {
+  const role = await getRoleByRoleIdAndUserIdDbService(roleId, userId);
+
+  return role != null;
 }
-async function updateRoleByRoleIdService(roleID,data){
-    return await updateRoleByIdDbService(roleID,data);
-} 
+async function updateRoleByRoleIdService(roleID, data) {
+  return await updateRoleByIdDbService(roleID, data);
+}
+
+async function userCreationNotificationService(email) {
+  const option = createTransportOptions({
+    to: email,
+    subject: "success fully created",
+    text: "Your account is now available to be used",
+  });
+
+  return await sendMailService(option);
+}
+
+async function userAuthNotificationService(email) {
+  const option = createTransportOptions({
+    to: email,
+    subject: "some One has logged in to your account",
+    text: "Your account has been loggedIn by " + new Date().toString(),
+  });
+  return await sendMailService(option);
+}
 export {
+  userAuthNotificationService,
+  userCreationNotificationService,
   addRoleService,
   getUserByIdService,
   createUserService,
@@ -95,5 +118,5 @@ export {
   getJwtTokenService,
   getFullProfileService,
   checkRoleChangePermissionService,
-  updateRoleByRoleIdService
+  updateRoleByRoleIdService,
 };

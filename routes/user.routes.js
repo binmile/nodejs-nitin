@@ -8,6 +8,9 @@ import {
   signInUserController,
   updateUserController,
   updateRoleController,
+  getAllUserLeftJoinController,
+  getAllUserRightJoinController,
+  getAllUserInnerJoinController
 } from "../controllers/user.controller.js";
 import { updateRoleMiddleware } from "../middleware/role.middleware.js";
 import { authUserMiddleware } from "../middleware/user.middleware.js";
@@ -26,6 +29,17 @@ app.post("/signIn", signInUserController);
 
 app.post("/addRole", authUserMiddleware, addRoleController);
 
-app.put("/updateRole/:id", authUserMiddleware,updateRoleMiddleware, updateRoleController);
+app.put(
+  "/updateRole/:id",
+  authUserMiddleware,
+  updateRoleMiddleware,
+  updateRoleController
+);
 
 app.get("/getFullProfile", authUserMiddleware, getFullProfileController);
+
+app.get('/getAllUserInnerJoin',getAllUserInnerJoinController);
+app.get('/getAllUserRightJoin',getAllUserRightJoinController);
+app.get('/getAllUserLeftJoin',getAllUserLeftJoinController)
+
+
